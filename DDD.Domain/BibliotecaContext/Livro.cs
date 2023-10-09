@@ -18,7 +18,9 @@ namespace DDD.Domain.BibliotecaContext
         public int Paginas { get; set; }
         public int Quantidade { get; set; }
 
-        
+        public IList<Emprestimo>? Emprestimos { get; set; }
+
+
 
 
     }

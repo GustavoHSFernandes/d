@@ -13,6 +13,10 @@ namespace DDD.Domain.SecretariaContext
     public class Aluno : User
     {
         public IList<Disciplina>? Disciplinas { get; set; }
+        public IList<Emprestimo>? Emprestimos { get; set; }
+
+
+
         //public IList<Matricula>? Matriculas { get; set; }
 
     }

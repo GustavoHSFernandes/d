@@ -19,5 +19,8 @@ namespace DDD.Domain.BibliotecaContext
 
         public DateTime Data {get; set;}
 
+        public IList<Livro>? Livros { get; set; }
+
+
     }
 }
