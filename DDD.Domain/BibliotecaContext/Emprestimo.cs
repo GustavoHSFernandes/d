@@ -16,10 +16,13 @@ namespace DDD.Domain.BibliotecaContext
         public Livro Livro { get; set; }
 
         public int AlunoId { get; set; }
+        public Aluno Aluno { get; set; }
 
         public DateTime Data {get; set;}
 
-        public IList<Livro>? Livros { get; set; }
+
+
+        
 
 
     }

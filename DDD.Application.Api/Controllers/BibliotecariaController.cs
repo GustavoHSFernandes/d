@@ -18,13 +18,13 @@ namespace DDD.Application.Api.Controllers
 
         // GET: api/<BibliotecariaController>
         [HttpGet]
-        public ActionResult<List<Aluno>> Get()
+        public ActionResult<List<Bibliotecaria>> Get()
         {
             return Ok(_bibliotecariaRepository.GetBibliotecarias());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Aluno> GetById(int id)
+        public ActionResult<Bibliotecaria> GetById(int id)
         {
             return Ok(_bibliotecariaRepository.GetBibliotecariaById(id));
         }
@@ -32,7 +32,7 @@ namespace DDD.Application.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Bibliotecaria> CreateAluno(Bibliotecaria bibliotecaria)
+        public ActionResult<Bibliotecaria> CreateBibliotecaria(Bibliotecaria bibliotecaria)
         {
             if (bibliotecaria.Nome.Length < 3 || bibliotecaria.Nome.Length > 30)
             {

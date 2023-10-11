@@ -1,6 +1,7 @@
 ﻿using DDD.Domain.BibliotecaContext;
 using DDD.Domain.SecretariaContext;
 using DDD.Infra.SQLServer.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,27 +20,37 @@ namespace DDD.Infra.SQLServer.Repositories
         }
         public void DeleteEmprestimo(Emprestimo emprestimo)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Set<Emprestimo>().Remove(emprestimo);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public Emprestimo GetEmprestimoById(int id)
         {
-            throw new NotImplementedException();
+            return _context.Emprestimos.Find(id);
         }
 
-        public List<Matricula> GetEmprestimos()
+        public List<Emprestimo> GetEmprestimos()
         {
-            throw new NotImplementedException();
+            return _context.Emprestimos.ToList();
         }
 
-        public Emprestimo InsertEmprestimo(int idLivro, int idAluno)
+        public Emprestimo InsertEmprestimo(int idAluno, int idLivro)
         {
-            
-            var livro = _context.Livros.First(i => i.LivroId == idLivro);
             var aluno = _context.Alunos.First(i => i.UserId == idAluno);
+            var livro = _context.Livros.First(i => i.LivroId == idLivro);
+            
 
             var emprestimo = new Emprestimo
             {
+                Aluno = aluno,
                 Livro = livro
                 
             };
@@ -62,7 +73,17 @@ namespace DDD.Infra.SQLServer.Repositories
 
         public void UpdateEmprestimo(Emprestimo emprestimo)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Entry(emprestimo).State = EntityState.Modified;
+                _context.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }

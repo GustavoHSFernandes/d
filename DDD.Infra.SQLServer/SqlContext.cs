@@ -26,12 +26,13 @@ namespace DDD.Infra.SQLServer
                 .UsingEntity<Matricula>();
 
             modelBuilder.Entity<Aluno>()
-                .HasOne(e => e.Emprestimos)
-                .WithMany(e => e.Livros)
+                .HasMany(e => e.Livros)
+                .WithMany(e => e.Alunos)
                 .UsingEntity<Emprestimo>();
 
             modelBuilder.Entity<User>().UseTpcMappingStrategy();
             modelBuilder.Entity<Aluno>().ToTable("Aluno");
+            modelBuilder.Entity<Bibliotecaria>().ToTable("Bibliotecaria");
             modelBuilder.Entity<Pesquisador>().ToTable("Pesquisador");
             //https://learn.microsoft.com/pt-br/ef/core/modeling/inheritance
         }

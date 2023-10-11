@@ -32,7 +32,10 @@ namespace DDD.Infra.SQLServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmprestimoId"));
 
-                    b.Property<int>("AlunoId")
+                    b.Property<int>("AlunosUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BibliotecariaId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Data")
@@ -42,6 +45,10 @@ namespace DDD.Infra.SQLServer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("EmprestimoId");
+
+                    b.HasIndex("AlunosUserId");
+
+                    b.HasIndex("BibliotecariaId");
 
                     b.HasIndex("LivroId");
 
@@ -60,6 +67,9 @@ namespace DDD.Infra.SQLServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("BibliotecariaUserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Genero")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -75,6 +85,8 @@ namespace DDD.Infra.SQLServer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("LivroId");
+
+                    b.HasIndex("BibliotecariaUserId");
 
                     b.ToTable("Livros");
                 });
@@ -206,7 +218,7 @@ namespace DDD.Infra.SQLServer.Migrations
                 {
                     b.HasBaseType("DDD.Domain.UserManagementContext.User");
 
-                    b.ToTable("Bibliotecarias");
+                    b.ToTable("Bibliotecaria", (string)null);
                 });
 
             modelBuilder.Entity("DDD.Domain.PicContext.Pesquisador", b =>
@@ -229,13 +241,34 @@ namespace DDD.Infra.SQLServer.Migrations
 
             modelBuilder.Entity("DDD.Domain.BibliotecaContext.Emprestimo", b =>
                 {
+                    b.HasOne("DDD.Domain.SecretariaContext.Aluno", null)
+                        .WithMany()
+                        .HasForeignKey("AlunosUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DDD.Domain.BibliotecaContext.Bibliotecaria", "Bibliotecaria")
+                        .WithMany()
+                        .HasForeignKey("BibliotecariaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DDD.Domain.BibliotecaContext.Livro", "Livro")
                         .WithMany()
                         .HasForeignKey("LivroId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Bibliotecaria");
+
                     b.Navigation("Livro");
+                });
+
+            modelBuilder.Entity("DDD.Domain.BibliotecaContext.Livro", b =>
+                {
+                    b.HasOne("DDD.Domain.BibliotecaContext.Bibliotecaria", null)
+                        .WithMany("Livros")
+                        .HasForeignKey("BibliotecariaUserId");
                 });
 
             modelBuilder.Entity("DDD.Domain.PicContext.Projeto", b =>
@@ -262,6 +295,11 @@ namespace DDD.Infra.SQLServer.Migrations
                     b.Navigation("Aluno");
 
                     b.Navigation("Disciplina");
+                });
+
+            modelBuilder.Entity("DDD.Domain.BibliotecaContext.Bibliotecaria", b =>
+                {
+                    b.Navigation("Livros");
                 });
 
             modelBuilder.Entity("DDD.Domain.PicContext.Pesquisador", b =>

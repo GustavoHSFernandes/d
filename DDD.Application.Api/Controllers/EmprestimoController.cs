@@ -32,9 +32,9 @@ namespace DDD.Application.Api.Controllers
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<Emprestimo> CreateEmprestimo(int idLivro, int idAluno)
+    public ActionResult<Emprestimo> CreateEmprestimo(int idAluno, int idLivro)
     {
-        Emprestimo emprestimoIdSaved = _emprestimoRepository.InsertEmprestimo(idLivro, idAluno);
+        Emprestimo emprestimoIdSaved = _emprestimoRepository.InsertEmprestimo(idAluno,idLivro );
         return CreatedAtAction(nameof(GetById), new { id = emprestimoIdSaved.EmprestimoId }, emprestimoIdSaved);
     }
 

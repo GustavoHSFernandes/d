@@ -10,9 +10,9 @@ namespace DDD.Infra.SQLServer.Interfaces
 {
     public interface IEmprestimoRepository
     {
-        public List<Matricula> GetEmprestimos();
+        public List<Emprestimo> GetEmprestimos();
         public Emprestimo GetEmprestimoById(int id);
-        public Emprestimo InsertEmprestimo(int idLivro, int idAluno);
+        public Emprestimo InsertEmprestimo( int idAluno,int idLivro);
         public void UpdateEmprestimo(Emprestimo emprestimo);
         public void DeleteEmprestimo(Emprestimo emprestimo);
     }

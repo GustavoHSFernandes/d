@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DDD.Infra.SQLServer.Migrations
 {
     /// <inheritdoc />
-    public partial class geracaoTabelaPkUnica : Migration
+    public partial class criacaoInicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,6 +30,24 @@ namespace DDD.Infra.SQLServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Aluno", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Bibliotecaria",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false, defaultValueSql: "NEXT VALUE FOR [UserSequence]"),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Sobrenome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Login = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Senha = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Ativo = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bibliotecaria", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -65,6 +83,29 @@ namespace DDD.Infra.SQLServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Pesquisador", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Livros",
+                columns: table => new
+                {
+                    LivroId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Autor = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Genero = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Paginas = table.Column<int>(type: "int", nullable: false),
+                    Quantidade = table.Column<int>(type: "int", nullable: false),
+                    BibliotecariaUserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Livros", x => x.LivroId);
+                    table.ForeignKey(
+                        name: "FK_Livros_Bibliotecaria_BibliotecariaUserId",
+                        column: x => x.BibliotecariaUserId,
+                        principalTable: "Bibliotecaria",
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -115,6 +156,60 @@ namespace DDD.Infra.SQLServer.Migrations
                         principalColumn: "UserId");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Emprestimos",
+                columns: table => new
+                {
+                    EmprestimoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LivroId = table.Column<int>(type: "int", nullable: false),
+                    BibliotecariaId = table.Column<int>(type: "int", nullable: false),
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AlunosUserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Emprestimos", x => x.EmprestimoId);
+                    table.ForeignKey(
+                        name: "FK_Emprestimos_Aluno_AlunosUserId",
+                        column: x => x.AlunosUserId,
+                        principalTable: "Aluno",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Emprestimos_Bibliotecaria_BibliotecariaId",
+                        column: x => x.BibliotecariaId,
+                        principalTable: "Bibliotecaria",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Emprestimos_Livros_LivroId",
+                        column: x => x.LivroId,
+                        principalTable: "Livros",
+                        principalColumn: "LivroId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Emprestimos_AlunosUserId",
+                table: "Emprestimos",
+                column: "AlunosUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Emprestimos_BibliotecariaId",
+                table: "Emprestimos",
+                column: "BibliotecariaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Emprestimos_LivroId",
+                table: "Emprestimos",
+                column: "LivroId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Livros_BibliotecariaUserId",
+                table: "Livros",
+                column: "BibliotecariaUserId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Matriculas_AlunoId",
                 table: "Matriculas",
@@ -135,10 +230,16 @@ namespace DDD.Infra.SQLServer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Emprestimos");
+
+            migrationBuilder.DropTable(
                 name: "Matriculas");
 
             migrationBuilder.DropTable(
                 name: "Projetos");
+
+            migrationBuilder.DropTable(
+                name: "Livros");
 
             migrationBuilder.DropTable(
                 name: "Aluno");
@@ -148,6 +249,9 @@ namespace DDD.Infra.SQLServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Pesquisador");
+
+            migrationBuilder.DropTable(
+                name: "Bibliotecaria");
 
             migrationBuilder.DropSequence(
                 name: "UserSequence");
