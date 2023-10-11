@@ -1,5 +1,7 @@
+using DDD.Domain.BibliotecaContext;
 using DDD.Domain.SecretariaContext;
 using DDD.Infra.SQLServer.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +22,18 @@ namespace DDD.Infra.SQLServer.Repositories
 
         public void DeleteMatricula(Matricula matricula)
         {
-            throw new NotImplementedException();
+            _context.Set<Matricula>().Remove(matricula);
+            _context.SaveChanges();
         }
 
         public Matricula GetMatriculaById(int id)
         {
-            throw new NotImplementedException();
+            return _context.Matriculas.Find(id);
         }
 
         public List<Matricula> GetMatriculas()
         {
-            throw new NotImplementedException();
+            return _context.Matriculas.ToList();
         }
 
         public Matricula InsertMatricula(int idAluno, int idDisciplina)
@@ -62,7 +65,17 @@ namespace DDD.Infra.SQLServer.Repositories
 
         public void UpdateMatricula(Matricula matricula)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Entry(matricula).State = EntityState.Modified;
+                _context.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }

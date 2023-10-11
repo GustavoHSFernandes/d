@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DDD.Infra.SQLServer.Migrations
 {
     /// <inheritdoc />
-    public partial class criacaoInicial : Migration
+    public partial class Criacaoinicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -162,24 +162,17 @@ namespace DDD.Infra.SQLServer.Migrations
                 {
                     EmprestimoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    AlunoId = table.Column<int>(type: "int", nullable: false),
                     LivroId = table.Column<int>(type: "int", nullable: false),
-                    BibliotecariaId = table.Column<int>(type: "int", nullable: false),
-                    Data = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AlunosUserId = table.Column<int>(type: "int", nullable: false)
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Emprestimos", x => x.EmprestimoId);
                     table.ForeignKey(
-                        name: "FK_Emprestimos_Aluno_AlunosUserId",
-                        column: x => x.AlunosUserId,
+                        name: "FK_Emprestimos_Aluno_AlunoId",
+                        column: x => x.AlunoId,
                         principalTable: "Aluno",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Emprestimos_Bibliotecaria_BibliotecariaId",
-                        column: x => x.BibliotecariaId,
-                        principalTable: "Bibliotecaria",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -191,14 +184,9 @@ namespace DDD.Infra.SQLServer.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Emprestimos_AlunosUserId",
+                name: "IX_Emprestimos_AlunoId",
                 table: "Emprestimos",
-                column: "AlunosUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Emprestimos_BibliotecariaId",
-                table: "Emprestimos",
-                column: "BibliotecariaId");
+                column: "AlunoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Emprestimos_LivroId",

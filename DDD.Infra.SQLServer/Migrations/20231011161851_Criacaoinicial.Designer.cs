@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DDD.Infra.SQLServer.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20231011152719_criacaoInicial")]
-    partial class criacaoInicial
+    [Migration("20231011161851_Criacaoinicial")]
+    partial class Criacaoinicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,10 +35,7 @@ namespace DDD.Infra.SQLServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmprestimoId"));
 
-                    b.Property<int>("AlunosUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BibliotecariaId")
+                    b.Property<int>("AlunoId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Data")
@@ -49,9 +46,7 @@ namespace DDD.Infra.SQLServer.Migrations
 
                     b.HasKey("EmprestimoId");
 
-                    b.HasIndex("AlunosUserId");
-
-                    b.HasIndex("BibliotecariaId");
+                    b.HasIndex("AlunoId");
 
                     b.HasIndex("LivroId");
 
@@ -244,15 +239,9 @@ namespace DDD.Infra.SQLServer.Migrations
 
             modelBuilder.Entity("DDD.Domain.BibliotecaContext.Emprestimo", b =>
                 {
-                    b.HasOne("DDD.Domain.SecretariaContext.Aluno", null)
+                    b.HasOne("DDD.Domain.SecretariaContext.Aluno", "Aluno")
                         .WithMany()
-                        .HasForeignKey("AlunosUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DDD.Domain.BibliotecaContext.Bibliotecaria", "Bibliotecaria")
-                        .WithMany()
-                        .HasForeignKey("BibliotecariaId")
+                        .HasForeignKey("AlunoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -262,7 +251,7 @@ namespace DDD.Infra.SQLServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Bibliotecaria");
+                    b.Navigation("Aluno");
 
                     b.Navigation("Livro");
                 });

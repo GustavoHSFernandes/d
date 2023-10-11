@@ -10,13 +10,13 @@ namespace DDD.Domain.BibliotecaContext
     public class Emprestimo
     {
         public int EmprestimoId { get; set; }
-
+        public int AlunoId { get; set; }
+        public Aluno Aluno { get; set; }
         public int LivroId { get; set; }
 
         public Livro Livro { get; set; }
 
-        public int AlunoId { get; set; }
-        public Aluno Aluno { get; set; }
+        
 
         public DateTime Data {get; set;}
 
